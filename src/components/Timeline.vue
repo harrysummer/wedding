@@ -43,22 +43,27 @@ div.timeline(
     div.timeline-title(v-if='post.title') {{ post.title }}
     div.timeline-date(v-if='post.date') {{ post.date }}
     img.timeline-image(v-if='post.photos && post.photos.length == 1' v-lazy='"/api/photo/" + post.photos[0]')
+    rd-swipe.timeline-slide(v-else-if='post.photos && post.photos.length > 1' :swipe='swipe[post._id]')
+      div.rd-swipe-item(v-for='photo of post.photos'): img.timeline-slide-image(v-lazy='"/api/photo/" + photo')
     div.timeline-content(v-if='post.content' v-html='marked(post.content)')
 </template>
 
 <script>
 import axios from 'axios'
 import marked from 'marked'
-import $ from 'jquery'
+import rdSwipe from 'vue-slide/vue-slide'
 import Han from 'han-css'
+import $ from 'jquery'
 
 export default {
   name: 'timeline',
+  components: { 'rd-swipe': rdSwipe },
   data () {
     return {
       marked,
       posts: [],
       errors: [],
+      swipe: {},
       visible: false,
       itemMinGap: 40,
       itemMinOffset: 48,
@@ -129,6 +134,15 @@ export default {
           this.errors.push(response.data.error.message)
         } else {
           this.posts = response.data
+        }
+        for (var i = 0; i < this.posts.length; ++i) {
+          if (this.posts[i].photos && this.posts[i].photos.length > 1) {
+            this.swipe[this.posts[i]._id] = {
+              activeIndex: 0,
+              autoplay: 3000,
+              pagination: true
+            }
+          }
         }
         this.$Lazyload.$on('loaded', this.layout)
       })
@@ -223,6 +237,14 @@ export default {
       margin 0 auto
       bottom 0
       background linear-gradient(to bottom, $golden, $golden 24px, $goldentransparent)
+
+  .timeline-slide
+    width 100%
+    height auto
+
+  .timeline-slide-image
+    width 100%
+    height auto
 
   .timeline-item
     box-sizing border-box

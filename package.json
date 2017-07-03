@@ -25,7 +25,8 @@
     "vue-awesome": "^2.3.1",
     "vue-baidu-map": "^0.10.10",
     "vue-config": "^1.0.0",
-    "vue-router": "^2.3.1"
+    "vue-router": "^2.3.1",
+    "vue-slide": "^1.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.2",
