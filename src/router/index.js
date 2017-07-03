@@ -8,7 +8,7 @@ import config from '@/config'
 
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -44,3 +44,10 @@ export default new Router({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title + ' - ' + config.website
+  next()
+})
+
+export default router
