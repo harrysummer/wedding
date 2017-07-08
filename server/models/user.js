@@ -1,20 +1,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var Photo = new Schema({
-  name: {
+var User = new Schema({
+  username: {
     type: String,
     required: true,
     index: true
   },
-  mime: {
+  password: {
     type: String,
     required: true
   },
-  content: {
-    type: Schema.Types.Buffer,
-    required: true
-  }
+  permissions: [String]
 });
 
-module.exports = mongoose.model('Photo', Photo);
+module.exports = mongoose.model('User', User);

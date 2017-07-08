@@ -12,19 +12,22 @@ const configs = {
     homepage: '一起开始的旅程',
     wedding: '结婚典礼',
     guestbook: '留言板',
-    contact: '联系方式'
+    contact: '联系方式',
+    login: '登录'
   },
   pageShort: {
     homepage: '睿&萌',
     wedding: '婚礼',
     guestbook: '留言',
-    contact: '联系'
+    contact: '联系',
+    login: '登录'
   },
   title: {
     wedding: '婚礼',
     schedule: '日程安排',
     attend: '参加婚礼',
-    notes: '注意事项'
+    notes: '注意事项',
+    login: '登录'
   },
   wedding: {
     date: '2017年7月28日',

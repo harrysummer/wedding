@@ -4,6 +4,7 @@ import Homepage from '@/components/Homepage'
 import Wedding from '@/components/Wedding'
 import Guestbook from '@/components/Guestbook'
 import Contact from '@/components/Contact'
+import Login from '@/components/Login'
 import config from '@/config'
 
 Vue.use(Router)
@@ -40,6 +41,14 @@ const router = new Router({
       component: Contact,
       meta: {
         title: config.page.contact
+      }
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login,
+      meta: {
+        title: config.page.login
       }
     }
   ]
