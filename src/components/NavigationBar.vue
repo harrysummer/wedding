@@ -15,14 +15,24 @@ div.pure-menu.pure-menu-horizontal
     li.pure-menu-item.pure-menu-has-children.pure-menu-allow-hover
       a.pure-menu-link(href='#') {{username}}
       ul.pure-menu-children
-        li.pure-menu-item
+        li.pure-menu-item(v-if='permissions.includes("post:create") || \
+                                permissions.includes("post:edit") || \
+                                permissions.includes("post:remove")')
           router-link.pure-menu-link(to='/admin/posts') {{$config.pageShort.adminPosts}}
-        li.pure-menu-item
+        li.pure-menu-item(v-if='permissions.includes("photo:create") || \
+                                permissions.includes("photo:remove")')
           router-link.pure-menu-link(to='/admin/photos') {{$config.pageShort.adminPhotos}}
-        li.pure-menu-item
+        li.pure-menu-item(v-if='permissions.includes("attendee:create") || \
+                                permissions.includes("attendee:edit") || \
+                                permissions.includes("attendee:remove")')
           router-link.pure-menu-link(to='/admin/attendee') {{$config.pageShort.adminAttendee}}
-        li.pure-menu-item
+        li.pure-menu-item(v-if='permissions.includes("guestbook:reply") || \
+                                permissions.includes("guestbook:remove")')
           router-link.pure-menu-link(to='/admin/guestbook') {{$config.pageShort.adminGuestbook}}
+        li.pure-menu-item(v-if='permissions.includes("user:create") || \
+                                permissions.includes("user:edit") || \
+                                permissions.includes("user:remove")')
+          router-link.pure-menu-link(to='/admin/users') {{$config.pageShort.adminUsers}}
         li.pure-menu-item
           a.pure-menu-link(v-on:click='logout' style='cursor: pointer') {{$config.pageShort.logout}}
 </template>
@@ -36,16 +46,26 @@ export default {
   data () {
     return {
       isLogin: false,
-      username: ''
+      username: '',
+      permissions: []
     }
   },
   created () {
     this.isLogin = sessionStorage.token !== undefined
-    this.username = sessionStorage.token ? jwtDecode(sessionStorage.token).username : ''
+    if (this.isLogin) {
+      var key = jwtDecode(sessionStorage.token)
+      this.username = key.username
+      this.permissions = key.permissions
+    }
   },
   updated () {
-    this.isLogin = sessionStorage.token !== undefined
-    this.username = sessionStorage.token ? jwtDecode(sessionStorage.token).username : ''
+    var isLoginNew = sessionStorage.token !== undefined
+    if (this.isLogin !== isLoginNew) {
+      this.isLogin = isLoginNew
+      var key = jwtDecode(sessionStorage.token)
+      this.username = key.username
+      this.permissions = key.permissions
+    }
   },
   methods: {
     logout () {

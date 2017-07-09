@@ -17,7 +17,8 @@ const configs = {
     adminPosts: '时间线编辑',
     adminPhotos: '图片管理',
     adminAttendee: '嘉宾管理',
-    adminGuestbook: '留言管理'
+    adminGuestbook: '留言管理',
+    adminUsers: '用户管理'
   },
   pageShort: {
     homepage: '睿&萌',
@@ -29,7 +30,8 @@ const configs = {
     adminPosts: '撰文',
     adminPhotos: '插图',
     adminAttendee: '嘉宾',
-    adminGuestbook: '留言'
+    adminGuestbook: '留言',
+    adminUsers: '用户'
   },
   title: {
     wedding: '婚礼',
@@ -40,7 +42,8 @@ const configs = {
     adminPosts: '时间线编辑',
     adminPhotos: '图片管理',
     adminAttendee: '嘉宾管理',
-    adminGuestbook: '留言管理'
+    adminGuestbook: '留言管理',
+    adminUsers: '用户管理'
   },
   wedding: {
     date: '2017年7月28日',
