@@ -16,6 +16,7 @@ router.use('/photo', bodyParser.raw({ limit: '16mb', type: 'image/*' }));
 var Post = require('./models/post');
 var Photo = require('./models/photo');
 var User = require('./models/user');
+var Attendee = require('./models/attendee');
 
 var privKey = "dr#t*f!)JfO45";
 
@@ -195,7 +196,7 @@ router.delete('/photo/id/:id', auth('photo:remove'), (req, res) => {
   });
 });
 
-router.post('/users', auth('user:list'), (req, res) => {
+router.post('/users', auth(), (req, res) => {
   User.find({})
       .select('user password permissions')
       .exec(function(err, docs) {
@@ -206,7 +207,7 @@ router.post('/users', auth('user:list'), (req, res) => {
       });
 });
 
-router.post('/user', bodyParser.json(), auth('user:view'), (req, res) => {
+router.post('/user', bodyParser.json(), auth('user:create'), (req, res) => {
   var user = new User();
   user.username = req.body.username;
   user.password = req.body.password;
@@ -268,6 +269,64 @@ router.post('/login', bodyParser.json(), (req, res) => {
         }
       });
     }
+  });
+});
+
+router.get('/attendee', auth(), (req, res) => {
+  Attendee.find({})
+      .select('name gender role side confirm count money note')
+      .exec(function(err, docs) {
+        if (err)
+          res.send(err);
+        else
+          res.json(docs);
+      });
+});
+
+router.post('/attendee', bodyParser.json(), auth('attendee:create'), (req, res) => {
+  var attendee = new Attendee();
+  attendee.name = req.body.name;
+  attendee.gender = req.body.gender;
+  if (req.body.role) attendee.role = req.body.role;
+  if (req.body.side) attendee.side = req.body.side;
+  if (req.body.confirm) attendee.confirm = req.body.confirm;
+  if (req.body.count) attendee.count = req.body.count;
+  if (req.body.money) attendee.money = req.body.money;
+  if (req.body.note) attendee.note = req.body.note;
+  attendee.save((err) => {
+    if (err) {
+      err.status = 1;
+      res.send(err);
+    } else
+      res.json({ status: 0 });
+  });
+});
+
+router.put('/attendee/:id', bodyParser.json(), auth('attendee:edit'), (req, res) => {
+  var update = {};
+  if (req.body.name) update.name = req.body.name;
+  if (req.body.gender) update.gender = req.body.gender;
+  if (req.body.role) update.role = req.body.role;
+  if (req.body.side) update.side = req.body.side;
+  if (req.body.confirm) update.confirm = req.body.confirm;
+  if (req.body.count) update.count = req.body.count;
+  if (req.body.money) update.money = req.body.money;
+  if (req.body.note) update.note = req.body.note;
+  Attendee.findByIdAndUpdate(req.params.id, update, function(err, attendee) {
+    if (err)
+      res.send(err);
+    else
+      res.json(attendee);
+  });
+});
+
+router.delete('/attendee/:id', auth('attendee:remove'), (req, res) => {
+  Attendee.findByIdAndRemove(req.params.id, (err) => {
+    if (err) {
+      err.status = 1;
+      res.send(err);
+    } else
+      res.json({ status: 0 });
   });
 });
 

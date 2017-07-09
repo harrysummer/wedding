@@ -97,7 +97,7 @@ export default {
         if (res.data.status) {
           this.error = '数据获取失败'
           this.posts = []
-        } else if (!res.data) {
+        } else if (!res.data || !res.data.length) {
           this.error = '无数据'
           this.posts = []
         } else {
