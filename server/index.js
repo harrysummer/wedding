@@ -19,7 +19,8 @@ var User = require('./models/user');
 
 var privKey = "dr#t*f!)JfO45";
 
-var auth = (permission) => [
+var auth = (permission) => {
+  var ret = [
   expressJwt({ secret: privKey }),
   (err, req, res, next) => {
     if (err.code === 'credentials_required')
@@ -28,13 +29,17 @@ var auth = (permission) => [
       res.json({ status: 4 });
     else if (err.name === 'UnauthorizedError')
       res.json({ status: 2 });
-  },
-  guard.check(permission),
-  (err, req, res, next) => {
-    if (err.code === 'permission_denied')
-      res.json({ status: 3 });
+  }];
+  if (permission) {
+    ret = ret.concat([
+      guard.check(permission),
+      (err, req, res, next) => {
+        if (err.code === 'permission_denied')
+          res.json({ status: 3 });
+      }]);
   }
-];
+  return ret;
+};
 
 /*
  * status code definitions:
@@ -56,11 +61,18 @@ router.get('/posts', (req, res) => {
       });
 });
 
+router.get('/posts/abstract', auth(), (req, res) => {
+  Post.find({})
+      .select('key title type')
+      .sort('-key')
+      .exec(function(err, docs) {
+        if (err)
+          res.send(err);
+        res.json(docs);
+      });
+});
+
 router.post('/post', bodyParser.json(), auth('post:create'), (req, res) => {
-  if (!req.user.permissions.includes('CREATE_POST')) {
-    res.json({ status: 3 });
-    return;
-  }
   var post = new Post();
   post.type = req.body.type;
   if (req.body.title) post.title = req.body.title;
@@ -76,7 +88,7 @@ router.post('/post', bodyParser.json(), auth('post:create'), (req, res) => {
   });
 });
 
-router.get('/post/:id', auth('post:view'), (req, res) => {
+router.get('/post/:id', auth(), (req, res) => {
   Post.findById(req.params.id)
       .select('key title date type content icon photos')
       .exec(function(err, post) {
@@ -110,7 +122,7 @@ router.delete('/post/:id', auth('post:remove'), (req, res) => {
   });
 });
 
-router.get('/photo/id/:id', auth('photo:view_by_id'), (req, res) => {
+router.get('/photo/id/:id', auth(), (req, res) => {
   Photo.findById(req.params.id, (err, photo) => {
     if (err || !photo) {
       res.status(404).send(err);
@@ -144,7 +156,7 @@ router.post('/photo', auth('photo:create'), (req, res) => {
   });
 });
 
-router.delete('/photo/:name', auth('photo:delete_by_name'), (req, res) => {
+router.delete('/photo/:name', auth('photo:remove'), (req, res) => {
   Photo.findOneAndRemove({name: req.params.name}, function(err) {
     if (err)
       res.send(err);
@@ -152,7 +164,7 @@ router.delete('/photo/:name', auth('photo:delete_by_name'), (req, res) => {
   });
 });
 
-router.delete('/photo/id/:id', auth('photo:delete_by_id'), (req, res) => {
+router.delete('/photo/id/:id', auth('photo:remove'), (req, res) => {
   Photo.findByIdAndRemove(req.params.id, function(err) {
     if (err)
       res.send(err);
@@ -182,7 +194,7 @@ router.post('/user', bodyParser.json(), auth('user:view'), (req, res) => {
   });
 });
 
-router.delete('/user/:username', auth('user:delete_by_name'), (req, res) => {
+router.delete('/user/:username', auth('user:remove'), (req, res) => {
   User.findOneAndRemove({username: req.params.username}, (err) => {
     if (err)
       res.send(err);
@@ -190,7 +202,7 @@ router.delete('/user/:username', auth('user:delete_by_name'), (req, res) => {
   });
 });
 
-router.delete('/user/id/:id', auth('user:delete_by_id'), (req, res) => {
+router.delete('/user/id/:id', auth('user:remove'), (req, res) => {
   User.findByIdAndRemove(req.params.id, (err) => {
     if (err)
       res.send(err);
@@ -201,7 +213,6 @@ router.delete('/user/id/:id', auth('user:delete_by_id'), (req, res) => {
 router.post('/login', bodyParser.json(), (req, res) => {
   var username = req.body.username;
   var password = req.body.password;
-  console.log(password);
   User.findOne({ username }, (err, user) => {
     if (err) {
       res.send(err);

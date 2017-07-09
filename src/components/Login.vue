@@ -1,11 +1,11 @@
 <template lang='pug'>
 div.pure-form.pure-form-stacked
-  div.text-alert(v-if='error')
-    p {{error}}
   fieldset
     legend {{$config.title.login}}
     input(type='text' placeholder='用户名' v-model='credential.username')
     input(type='password' placeholder='密码' v-model='credential.password')
+    div.text-alert(v-if='error')
+      p {{error}}
     button.pure-button.pure-button-primary(type='submit' v-on:click='login') 登录
 </template>
 
@@ -34,7 +34,7 @@ export default {
           this.error = '登陆失败'
         } else {
           window.sessionStorage.token = res.data.token
-          router.push('/')
+          router.replace('/')
         }
       })
     }
@@ -50,4 +50,7 @@ export default {
 <style lang='stylus' scoped>
 .login-form
   margin 0 auto 0 auto
+
+.text-alert
+  color #ee3366
 </style>

@@ -18,6 +18,7 @@
     "express-jwt-permissions": "^1.0.0",
     "han-css": "^3.3.0",
     "jsonwebtoken": "^7.4.1",
+    "jwt-decode": "^2.2.0",
     "marked": "^0.3.6",
     "mongoose": "^4.11.0",
     "mongoose-auto-increment": "^5.0.1",

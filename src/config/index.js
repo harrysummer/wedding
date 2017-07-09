@@ -13,21 +13,34 @@ const configs = {
     wedding: '结婚典礼',
     guestbook: '留言板',
     contact: '联系方式',
-    login: '登录'
+    login: '登录',
+    adminPosts: '时间线编辑',
+    adminPhotos: '图片管理',
+    adminAttendee: '嘉宾管理',
+    adminGuestbook: '留言管理'
   },
   pageShort: {
     homepage: '睿&萌',
     wedding: '婚礼',
     guestbook: '留言',
     contact: '联系',
-    login: '登录'
+    login: '登录',
+    logout: '注销',
+    adminPosts: '撰文',
+    adminPhotos: '插图',
+    adminAttendee: '嘉宾',
+    adminGuestbook: '留言'
   },
   title: {
     wedding: '婚礼',
     schedule: '日程安排',
     attend: '参加婚礼',
     notes: '注意事项',
-    login: '登录'
+    login: '登录',
+    adminPosts: '时间线编辑',
+    adminPhotos: '图片管理',
+    adminAttendee: '嘉宾管理',
+    adminGuestbook: '留言管理'
   },
   wedding: {
     date: '2017年7月28日',

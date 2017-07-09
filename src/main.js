@@ -21,6 +21,8 @@ import 'vue-awesome/icons/qq'
 import 'vue-awesome/icons/home'
 import 'vue-awesome/icons/university'
 import 'vue-awesome/icons/clock-o'
+import 'vue-awesome/icons/pencil'
+import 'vue-awesome/icons/trash'
 import Icon from 'vue-awesome/components/Icon'
 
 Vue.config.productionTip = false
