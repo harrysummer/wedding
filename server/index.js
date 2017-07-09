@@ -152,7 +152,7 @@ router.get('/photo/id/:id', auth(), (req, res) => {
 
 router.get('/photo/:name', (req, res) => {
   Photo.findOne({name: req.params.name}, (err, photo) => {
-    if (err || !photo) {
+    if (err || !photo || !req.get('referer') || !req.get('referer').includes('.xiarui.net/')) {
       res.status(404).send(err);
       return;
     }
