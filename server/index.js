@@ -57,7 +57,8 @@ router.get('/posts', (req, res) => {
       .exec(function(err, docs) {
         if (err)
           res.send(err);
-        res.json(docs);
+        else
+          res.json(docs);
       });
 });
 
@@ -68,7 +69,8 @@ router.get('/posts/abstract', auth(), (req, res) => {
       .exec(function(err, docs) {
         if (err)
           res.send(err);
-        res.json(docs);
+        else
+          res.json(docs);
       });
 });
 
@@ -94,7 +96,8 @@ router.get('/post/:id', auth(), (req, res) => {
       .exec(function(err, post) {
         if (err)
           res.send(err);
-        res.json(post);
+        else
+          res.json(post);
       });
 });
 
@@ -110,7 +113,8 @@ router.put('/post/:id', bodyParser.json(), auth('post:edit'), (req, res) => {
   Post.findByIdAndUpdate(req.params.id, update, function(err, post) {
     if (err)
       res.send(err);
-    res.json(post);
+    else
+      res.json(post);
   });
 });
 
@@ -118,8 +122,21 @@ router.delete('/post/:id', auth('post:remove'), (req, res) => {
   Post.findByIdAndRemove(req.params.id, function(err) {
     if (err)
       res.send(err);
-    res.json({ status: 0 });
+    else
+      res.json({ status: 0 });
   });
+});
+
+router.get('/photos/abstract', auth(), (req, res) => {
+  Photo.find({})
+      .select('name mime')
+      .sort('name')
+      .exec(function(err, docs) {
+        if (err)
+          res.send(err);
+        else
+          res.json(docs);
+      });
 });
 
 router.get('/photo/id/:id', auth(), (req, res) => {
@@ -150,25 +167,31 @@ router.post('/photo', auth('photo:create'), (req, res) => {
   photo.mime = req.get('content-type');
   photo.content = req.body;
   photo.save(function(err) {
-    if (err)
+    if (err) {
+      err.status = 1;
       res.send(err);
-    res.json({ status: 0 });
+    } else
+      res.json({ status: 0 });
   });
 });
 
 router.delete('/photo/:name', auth('photo:remove'), (req, res) => {
   Photo.findOneAndRemove({name: req.params.name}, function(err) {
-    if (err)
+    if (err) {
+      err.status = 1;
       res.send(err);
-    res.json({ status: 0 });
+    } else
+      res.json({ status: 0 });
   });
 });
 
 router.delete('/photo/id/:id', auth('photo:remove'), (req, res) => {
   Photo.findByIdAndRemove(req.params.id, function(err) {
-    if (err)
+    if (err) {
+      err.status = 1;
       res.send(err);
-    res.json({ status: 0 });
+    } else
+      res.json({ status: 0 });
   });
 });
 
@@ -178,7 +201,8 @@ router.post('/users', auth('user:list'), (req, res) => {
       .exec(function(err, docs) {
         if (err)
           res.send(err);
-        res.json(docs);
+        else
+          res.json(docs);
       });
 });
 
@@ -188,25 +212,31 @@ router.post('/user', bodyParser.json(), auth('user:view'), (req, res) => {
   user.password = req.body.password;
   if (req.body.permissions) user.permissions = req.body.permissions;
   user.save((err) => {
-    if (err)
+    if (err) {
+      err.status = 1;
       res.send(err);
-    res.json({ status: 0 });
+    } else
+      res.json({ status: 0 });
   });
 });
 
 router.delete('/user/:username', auth('user:remove'), (req, res) => {
   User.findOneAndRemove({username: req.params.username}, (err) => {
-    if (err)
+    if (err) {
+      err.status = 1;
       res.send(err);
-    res.json({ status: 0 });
+    } else
+      res.json({ status: 0 });
   });
 });
 
 router.delete('/user/id/:id', auth('user:remove'), (req, res) => {
   User.findByIdAndRemove(req.params.id, (err) => {
-    if (err)
+    if (err) {
+      err.status = 1;
       res.send(err);
-    res.json({ status: 0 });
+    } else
+      res.json({ status: 0 });
   });
 });
 
@@ -215,6 +245,7 @@ router.post('/login', bodyParser.json(), (req, res) => {
   var password = req.body.password;
   User.findOne({ username }, (err, user) => {
     if (err) {
+      err.status = 1;
       res.send(err);
     } else if (!user) {
       res.json({ status: 1 });
@@ -240,6 +271,6 @@ router.post('/login', bodyParser.json(), (req, res) => {
   });
 });
 
-router.get('*', (req, res) => res.json({ status: 'error' }));
+router.get('*', (req, res) => res.json({ status: 1 }));
 
 module.exports = router;

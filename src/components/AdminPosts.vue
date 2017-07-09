@@ -96,9 +96,14 @@ export default {
       }).then(res => {
         if (res.data.status) {
           this.error = '数据获取失败'
-          return
+          this.posts = []
+        } else if (!res.data) {
+          this.error = '无数据'
+          this.posts = []
+        } else {
+          this.error = ''
+          this.posts = res.data
         }
-        this.posts = res.data
       })
     },
     createPost () {
@@ -195,6 +200,10 @@ export default {
             'Authorization': 'Bearer ' + sessionStorage.token
           }
         }).then(res => {
+          if (res.data.status) {
+            window.alert('文章删除失败')
+            return
+          }
           this.fetchPosts()
         })
       }

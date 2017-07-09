@@ -23,6 +23,7 @@ import 'vue-awesome/icons/university'
 import 'vue-awesome/icons/clock-o'
 import 'vue-awesome/icons/pencil'
 import 'vue-awesome/icons/trash'
+import 'vue-awesome/icons/eye'
 import Icon from 'vue-awesome/components/Icon'
 
 Vue.config.productionTip = false
