@@ -1,26 +1,45 @@
 extends html
 block style
   style.
+    @font-face {
+      font-family: 'Song';
+      src: url('/fonts/SourceHanSerifSC-SemiBold.woff2') format('woff2'),
+           url('/fonts/SourceHanSerifSC-SemiBold.woff') format('woff'),
+           url('/fonts/SourceHanSerifSC-SemiBold.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Kai';
+      src: url('/fonts/FZKTK.woff2') format('woff2'),
+           url('/fonts/FZKTK.woff') format('woff'),
+           url('/fonts/FZKTK.ttf') format('truetype');
+    }
     body {
       background: #FEC;
+      font-size: 14pt;
     }
     .center-box {
+      padding: 20px;
       text-align: center;
-      max-width: 800px;
+      max-width: 600px;
       margin: 0 auto 0 auto;
     }
+    .left {
+      text-align: left;
+    }
+    .right {
+      text-align: right;
+    }
     .pure-g .bigger {
-      font-size: 24pt;
+      font-size: 20pt;
     }
     .pure-g .red {
-      font-family: "Noto Serif CJK SC Bold", "Source Han Serif SC Bold", "华文中宋", "宋体", simsun, serif;
+      font-family: Song, serif;
       color: #E24;
-      font-size: 22pt;
     }
     .pure-g .black {
-      font-family: "楷体", "楷体_GB2312", simkai;
+      font-family: Kai, sans-serif;
       color: black;
-      font-size: 22pt;
+      transform: translate(0,20%);
     }
     .vspace {
       margin-bottom: 10px;
@@ -34,56 +53,102 @@ block style
     .center {
       text-align: center;
     }
+    .vcenter-container {
+      position: relative;
+      top: 0;
+      left: 0;
+    }
+    .vcenter-content {
+      position: relative;
+      transform: translate(0,30%);
+    }
+    .vcenter-content2 {
+      position: relative;
+      transform: translate(0,60%);
+    }
+    .padding {
+      padding: 0 40px 0 40px;
+    }
 
 block main
-  div.pure-u-1-1 红双喜
+  div.pure-u-1
+    svg(xmlns='http://www.w3.org/2000/svg' width='186' height='186')
+      path(fill='none' stroke='#D02' stroke-width='16'
+        d='m51,0V43m84,0V0M17,25h68m16,0h68m13,26H4m21,25h51v25H25zm0,76h51v25H25zm85\n0h51v25h-51zm0-76h51v25H110zm25,33v42m-84,0V109M1,126.5H185z')
 
-  div.pure-u-1-4.red.bigger 送呈
-  div.pure-u-1-2.black= receiver
-  div.pure-u-1-4.red.bigger 台启
+  div.pure-u-1.vspace-huge
 
-  div.pure-u-1-1.vspace
+  div.pure-u-1-4.red.bigger.vcenter-container: div.vcenter-content 送呈
+  if typeof receiver === 'string'
+    div.pure-u-1-2.black.bigger= receiver
+  else
+    div.pure-u-1-2.pure-g
+      each name in receiver
+        div.pure-u-1.black.bigger= name
+  div.pure-u-1-4.red.bigger.vcenter-container: div.vcenter-content 台启
+
+  div.pure-u-1.vspace
   
-  div.pure-u-1-1.red.bigger 谨定于
+  div.pure-u-1.red.bigger 谨定于
 
-  div.pure-u-1-1.vspace-large
+  div.pure-u-1.vspace-large
 
-  div.pure-u-1-5(style="text-align: right")
-    div.pure-g
-      div.pure-u-1-1.red 公历
-      div.pure-u-1-1.vspace-large
-      div.pure-u-1-1.red 农历
+  div.pure-u-4-5.pure-g
+    div.pure-u-1.pure-g
+      div.pure-u-1-4.red 公历
+      div.pure-u-1-6.black= date[0]
+      div.pure-u-1-12.red 年
+      div.pure-u-1-6.black= date[1]
+      div.pure-u-1-12.red 月
+      div.pure-u-1-6.black= date[2]
+      div.pure-u-1-12.red 日
+    div.pure-u-1.pure-g
+      div.pure-u-1-4.red 农历
+      div.pure-u-1-6.black= date_lunar[0]
+      div.pure-u-1-12.red 年
+      div.pure-u-1-6.black= date_lunar[1]
+      div.pure-u-1-12.red 月
+      div.pure-u-1-6.black= date_lunar[2]
+      div.pure-u-1-12.red 日
 
-  div.pure-u-1-5(style="text-align: right")
-    div.pure-g
-      div.black.pure-u-1-1.pure-g
-        div.pure-u-3-4= date[0]
-        div.pure-u-1-4.red 年
-      div.pure-u-1-1.vspace-large
-      div.black.pure-u-1-1.pure-g
-        div.pure-g
-          div.black.pure-u-1-1.pure-g
-        span.red 年
+  div.pure-u-1-5.pure-g.vcenter-container
+    div.pure-u-1.pure-g.vcenter-content
+      div.pure-u-3-4.red 星期
+      div.pure-u-1-4.black.left= week
 
-  div.pure-u-1-5(style="text-align: right")
-    div.pure-g
-      div.black.pure-u-1-1= date[1]
-        span.red 月
-      div.pure-u-1-1.vspace-large
-      div.black.pure-u-1-1= date_lunar[1]
-        span.red 月
+  div.pure-u-1.vspace
 
-  div.pure-u-1-5(style="text-align: right")
-    div.pure-g
-      div.black.pure-u-1-1= date[2]
-        span.red 日
-      div.pure-u-1-1.vspace-large
-      div.black.pure-u-1-1= date_lunar[2]
-        span.red 日
+  div.pure-u-1-12.red.vcenter-container: div.vcenter-content2 为
+  div.pure-u-5-12.pure-g.black
+    div.pure-u-1.black= star[0]
+    div.pure-u-1.black= star[1]
+  div.pure-u-1-6.red.vcenter-container: div.vcenter-content2 举行
+  div.pure-u-1-3.black.vcenter-container: div.vcenter-content2= event
 
-  div.pure-u-3-5 为
-  div.pure-u-2-5 举行
+  div.pure-u-1.vspace-large
 
-  div.pure-u-1-1 恭请
-  div.pure-u-1-1 光临
+  div.pure-u-1.red.left.padding.bigger 恭请
+  div.pure-u-1.red.right.padding.bigger 光临
 
+  div.pure-u-1.vspace-huge
+
+  div.pure-u-1.left.red 席设：
+    span.black= place
+  
+  div.pure-u-1.vspace
+
+  div.pure-u-1.left.red 时间：
+    span.black= time
+
+  div.pure-u-1.vspace
+
+  div.pure-u-1.pure-g.vcenter-container
+    div.pure-u-3-5
+    div.pure-u-1-5.red.vcenter-content 邀请人
+    if typeof host === 'string'
+      div.pure-u-1-5.black= host
+    else
+      div.pure-u-1-5.pure-g
+        each name in host
+          div.pure-u-1.black= name
+        

@@ -22,6 +22,9 @@ var getName = function (person) {
   }
 };
 
+var getHost = function (person) {
+};
+
 app.set('views', __dirname + '/view');
 app.set('view engine', 'pug');
 app.get('/:id', (req, res) => {
@@ -41,7 +44,7 @@ app.get('/:id', (req, res) => {
       event: '结婚典礼',
       place: '安徽省巢湖市银屏路喜庆运升楼一楼',
       time: '11:28（中午）',
-      host: [ '夏清龙', '洪玉霞' ]
+      host: [ '夏　睿', '张　萌' ]
     });
   });
 });
