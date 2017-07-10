@@ -15,8 +15,8 @@ div
       tr(v-if='error')
         td(colspan='6' style='text-align:center') {{error}}
 
-      tr(v-for='person in attendee' v-bind:class='{"row-male": person.gender==="male", "row-female": person.gender==="female"}')
-        td {{person.name}}
+      tr(v-for='person in attendee')
+        td {{getName(person)}}
         td {{getIdentity(person)}}
         td {{getCount(person)}}
         td {{person.money}}
@@ -31,7 +31,7 @@ div
       legend {{editor.create ? '添加嘉宾' : '修改嘉宾'}}
       div.pure-control-group
         label(for='name') 姓名
-        input(type='text' id='name' v-model='editor.name')
+        input#name(type='text' v-model='editor.name')
 
       div.pure-control-group
         label(for='gender') 性别
@@ -43,10 +43,15 @@ div
           | 女
 
       div.pure-control-group
+        label(for='dependant') 家属
+        input#dependant(type='text' v-model='editor.dependant')
+
+      div.pure-control-group
         label(for='identity') 身份
         select#side(v-model='editor.side')
           option(value='bridegroom') 男方的
           option(value='bride') 女方的
+          option(value='shared') 共同的
         select#role(v-model='editor.role')
           option(value='relative') 亲属
           option(value='old_friend') 父母的朋友
@@ -91,6 +96,7 @@ export default {
       id: '',
       name: '',
       gender: '',
+      dependant: '',
       side: '',
       role: '',
       confirm: false,
@@ -100,6 +106,13 @@ export default {
     }
   }),
   methods: {
+    getName (person) {
+      if (person.dependant) {
+        return person.name + '夫妇'
+      } else {
+        return person.name
+      }
+    },
     getIdentity (person) {
       var side = {bride: '女方', bridegroom: '男方'}
       var role = {relative: '亲戚', old_friend: '父母的朋友', classmate: '同学'}
@@ -144,6 +157,7 @@ export default {
         create: true,
         name: '',
         gender: '',
+        dependant: '',
         side: '',
         role: '',
         confirm: false,
@@ -159,6 +173,7 @@ export default {
         id: person._id,
         name: person.name,
         gender: person.gender,
+        dependant: person.dependant,
         side: person.side,
         role: person.role,
         confirm: person.confirm,
@@ -172,13 +187,13 @@ export default {
         name: this.editor.name,
         gender: this.editor.gender
       }
-      console.log(this.editor)
-      if (this.editor.side) attendee.side = this.editor.side
-      if (this.editor.role) attendee.role = this.editor.role
+      attendee.dependant = this.editor.dependant
+      attendee.side = this.editor.side
+      attendee.role = this.editor.role
       attendee.confirm = this.editor.confirm
       attendee.count = this.editor.count
-      if (this.editor.money) attendee.money = this.editor.money
-      if (this.editor.note) attendee.note = this.editor.note
+      attendee.money = this.editor.money
+      attendee.note = this.editor.note
 
       if (this.editor.create) {
         axios.post('/api/attendee', attendee, {

@@ -78,11 +78,11 @@ router.get('/posts/abstract', auth(), (req, res) => {
 router.post('/post', bodyParser.json(), auth('post:create'), (req, res) => {
   var post = new Post();
   post.type = req.body.type;
-  if (req.body.title) post.title = req.body.title;
-  if (req.body.date) post.date = req.body.date;
-  if (req.body.content) post.content = req.body.content;
-  if (req.body.icon) post.icon = req.body.icon;
-  if (req.body.photos) post.photos = req.body.photos;
+  if (req.body.title !== undefined) post.title = req.body.title;
+  if (req.body.date !== undefined) post.date = req.body.date;
+  if (req.body.content !== undefined) post.content = req.body.content;
+  if (req.body.icon !== undefined) post.icon = req.body.icon;
+  if (req.body.photos !== undefined) post.photos = req.body.photos;
   post.save(function(err) {
     if (err)
       res.send(err);
@@ -104,13 +104,13 @@ router.get('/post/:id', auth(), (req, res) => {
 
 router.put('/post/:id', bodyParser.json(), auth('post:edit'), (req, res) => {
   var update = {};
-  if (req.body.title) update.title = req.body.title;
-  if (req.body.date) update.date = req.body.date;
-  if (req.body.type) update.type = req.body.type;
-  if (req.body.content) update.content = req.body.content;
-  if (req.body.icon) update.icon = req.body.icon;
-  if (req.body.photos) update.photos = req.body.photos;
-  if (req.body.key) update.key = req.body.key;
+  if (req.body.title !== undefined) update.title = req.body.title;
+  if (req.body.date !== undefined) update.date = req.body.date;
+  if (req.body.type !== undefined) update.type = req.body.type;
+  if (req.body.content !== undefined) update.content = req.body.content;
+  if (req.body.icon !== undefined) update.icon = req.body.icon;
+  if (req.body.photos !== undefined) update.photos = req.body.photos;
+  if (req.body.key !== undefined) update.key = req.body.key;
   Post.findByIdAndUpdate(req.params.id, update, function(err, post) {
     if (err)
       res.send(err);
@@ -274,7 +274,7 @@ router.post('/login', bodyParser.json(), (req, res) => {
 
 router.get('/attendee', auth(), (req, res) => {
   Attendee.find({})
-      .select('name gender role side confirm count money note')
+      .select('name gender role side confirm count money dependant note')
       .exec(function(err, docs) {
         if (err)
           res.send(err);
@@ -287,12 +287,13 @@ router.post('/attendee', bodyParser.json(), auth('attendee:create'), (req, res) 
   var attendee = new Attendee();
   attendee.name = req.body.name;
   attendee.gender = req.body.gender;
-  if (req.body.role) attendee.role = req.body.role;
-  if (req.body.side) attendee.side = req.body.side;
-  if (req.body.confirm) attendee.confirm = req.body.confirm;
-  if (req.body.count) attendee.count = req.body.count;
-  if (req.body.money) attendee.money = req.body.money;
-  if (req.body.note) attendee.note = req.body.note;
+  attendee.role = req.body.role;
+  attendee.side = req.body.side;
+  if (req.body.confirm !== undefined) attendee.confirm = req.body.confirm;
+  if (req.body.count !== undefined) attendee.count = req.body.count;
+  if (req.body.money !== undefined) attendee.money = req.body.money;
+  if (req.body.dependant !== undefined) attendee.dependant = req.body.dependant;
+  if (req.body.note !== undefined) attendee.note = req.body.note;
   attendee.save((err) => {
     if (err) {
       err.status = 1;
@@ -304,14 +305,15 @@ router.post('/attendee', bodyParser.json(), auth('attendee:create'), (req, res) 
 
 router.put('/attendee/:id', bodyParser.json(), auth('attendee:edit'), (req, res) => {
   var update = {};
-  if (req.body.name) update.name = req.body.name;
-  if (req.body.gender) update.gender = req.body.gender;
-  if (req.body.role) update.role = req.body.role;
-  if (req.body.side) update.side = req.body.side;
-  if (req.body.confirm) update.confirm = req.body.confirm;
-  if (req.body.count) update.count = req.body.count;
-  if (req.body.money) update.money = req.body.money;
-  if (req.body.note) update.note = req.body.note;
+  if (req.body.name !== undefined) update.name = req.body.name;
+  if (req.body.gender !== undefined) update.gender = req.body.gender;
+  if (req.body.role !== undefined) update.role = req.body.role;
+  if (req.body.side !== undefined) update.side = req.body.side;
+  if (req.body.confirm !== undefined) update.confirm = req.body.confirm;
+  if (req.body.count !== undefined) update.count = req.body.count;
+  if (req.body.money !== undefined) update.money = req.body.money;
+  if (req.body.dependant !== undefined) update.dependant = req.body.dependant;
+  if (req.body.note !== undefined) update.note = req.body.note;
   Attendee.findByIdAndUpdate(req.params.id, update, function(err, attendee) {
     if (err)
       res.send(err);

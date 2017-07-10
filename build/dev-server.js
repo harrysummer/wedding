@@ -12,6 +12,7 @@ var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
 var backend = require('../server')
+var invitation = require('../invitation')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -50,6 +51,7 @@ Object.keys(proxyTable).forEach(function (context) {
 })
 
 app.use('/api', backend);
+app.use('/invitation', invitation);
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())

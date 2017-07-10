@@ -15,7 +15,7 @@ module.exports = {
       env_production : {
         NODE_ENV: 'dev'
       },
-      watch: ['./server']
+      watch: ['./server', './build', './invitation']
     }
   ],
 
