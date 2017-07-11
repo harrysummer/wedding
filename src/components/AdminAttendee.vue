@@ -21,7 +21,7 @@ div
         td {{getCount(person)}}
         td {{person.money}}
         td
-          a.operation(v-on:click='showInvitaion(post._id)'): icon(name='address-card-o' scale='1.333')
+          a.operation.invitation(target='_blank' :href='"/invitation/" + person._id'): icon(name='address-card-o' scale='1.333')
           a.operation(v-if='permissions.includes("attendee:edit")' v-on:click='editAttendee(person)'): icon(name='pencil' scale='1.333')
           a.operation(v-if='permissions.includes("attendee:remove")' v-on:click='removeAttendee(person._id)'): icon(name='trash' scale='1.333')
 
@@ -288,4 +288,7 @@ export default {
 
 .row-female
   background #dd88aa
+
+.invitation:link, .invitation:hover, .invitation:visited, .invitation:active
+  color black
 </style>

@@ -11,6 +11,14 @@ var twoToThree = function (name) {
   }
 };
 
+var getTitle = function (person) {
+  if (!person.dependant) {
+    return '致' + person.name + (person.gender === 'male' ? '先生' : '女士') + '的婚礼请帖';
+  } else {
+    return '致' + person.name + '夫妇的婚礼请帖';
+  }
+};
+
 var getName = function (person) {
   if (!person.dependant) {
     return twoToThree(person.name) + ' ' + (person.gender==='male' ? '先生' : '女士');
@@ -23,6 +31,13 @@ var getName = function (person) {
 };
 
 var getHost = function (person) {
+  if (person.role === 'classmate') {
+    return [ twoToThree('夏睿'), twoToThree('张萌') ]
+  } else if (person.side === 'bridegroom') {
+    return [ '夏清龙', '洪玉霞' ]
+  } else {
+    return '张炳纪';
+  }
 };
 
 app.set('views', __dirname + '/view');
@@ -36,6 +51,7 @@ app.get('/:id', (req, res) => {
       return;
     }
 	  res.render('index', {
+      title: getTitle(person),
       receiver: getName(person),
       date: [ 2017, 7, 28 ],
       date_lunar: [ '丁酉', '闰六', '初六' ],
@@ -44,7 +60,7 @@ app.get('/:id', (req, res) => {
       event: '结婚典礼',
       place: '安徽省巢湖市银屏路喜庆运升楼一楼',
       time: '11:28（中午）',
-      host: [ '夏　睿', '张　萌' ]
+      host: getHost(person)
     });
   });
 });
