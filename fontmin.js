@@ -94,5 +94,5 @@ Attendee.find({})
     makeFont(nameTexts, 'FZKTK.TTF', __dirname + '/dist/static/fonts');
     mongoose.disconnect();
   });
-var staticTexts = "送呈台启谨定于公历农年月日星期为举行恭请光临席设时间邀人：";
+var staticTexts = "送呈台启谨定于公历农年月日星期为举行恭请光临席设时间敬邀：";
 makeFont(staticTexts, 'SourceHanSerifSC-SemiBold.otf', __dirname + '/dist/static/fonts');

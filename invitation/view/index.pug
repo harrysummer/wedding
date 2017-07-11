@@ -78,14 +78,16 @@ block main
 
   div.pure-u-1.vspace-huge
 
-  div.pure-u-1-4.red.bigger.vcenter-container: div.vcenter-content 送呈
   if typeof receiver === 'string'
+    div.pure-u-1-4.red.bigger 送呈
     div.pure-u-1-2.black.bigger= receiver
+    div.pure-u-1-4.red.bigger 台启
   else
+    div.pure-u-1-4.red.bigger.vcenter-container: div.vcenter-content 送呈
     div.pure-u-1-2.pure-g
       each name in receiver
         div.pure-u-1.black.bigger= name
-  div.pure-u-1-4.red.bigger.vcenter-container: div.vcenter-content 台启
+    div.pure-u-1-4.red.bigger.vcenter-container: div.vcenter-content 台启
 
   div.pure-u-1.vspace
   
