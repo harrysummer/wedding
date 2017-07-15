@@ -32,7 +32,10 @@ var getName = function (person) {
 
 var getHost = function (person) {
   if (person.role === 'classmate') {
-    return [ twoToThree('夏睿'), twoToThree('张萌') ]
+    if (person.side === 'bride')
+      return [ twoToThree('张萌'), twoToThree('夏睿') ]
+    else
+      return [ twoToThree('夏睿'), twoToThree('张萌') ]
   } else if (person.side === 'bridegroom') {
     return [ '夏清龙', '洪玉霞' ]
   } else {

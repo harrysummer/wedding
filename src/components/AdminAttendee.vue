@@ -2,24 +2,44 @@
 div
   h2 {{$config.title.adminAttendee}}
   button#new-attendee-btn.pure-button(v-on:click='createAttendee') 添加嘉宾
-  table.pure-table.pure-table-bordered
+  div.filter
+    span 过滤器
+    select#side(v-model='filter.side')
+      option(value='' selected) 不限阵营
+      option(value='bridegroom') 男方的
+      option(value='bride') 女方的
+      option(value='shared') 共同的
+    select#role(v-model='filter.role')
+      option(value='' selected) 不限关系
+      option(value='relative') 亲属
+      option(value='old_friend') 父母的朋友
+      option(value='classmate') 同学
+    select#role(v-model='filter.confirm')
+      option(value='' selected) 不限参加与否
+      option(value='attend') 确定参加
+      option(value='not_attend') 确定不参加
+      option(value='not_sure') 不确定是否参加
+
+  table.pure-table.pure-table-bordered(style='width:800px')
     thead
       tr
         th 姓名
         th 身份
         th 人数
         th 份子钱
+        th 备注
         th 操作
 
     tbody
       tr(v-if='error')
         td(colspan='6' style='text-align:center') {{error}}
 
-      tr(v-for='person in attendee')
+      tr(v-for='person in attendee' v-if='filterPass(person)')
         td {{getName(person)}}
         td {{getIdentity(person)}}
         td {{getCount(person)}}
         td {{person.money}}
+        td(v-html='getNoteHtml(person.note)')
         td
           a.operation.invitation(target='_blank' :href='"/invitation/" + person._id'): icon(name='address-card-o' scale='1.333')
           a.operation(v-if='permissions.includes("attendee:edit")' v-on:click='editAttendee(person)'): icon(name='pencil' scale='1.333')
@@ -82,6 +102,7 @@ div
 
 <script>
 import axios from 'axios'
+import marked from 'marked'
 import jwtDecode from 'jwt-decode'
 import router from '../router'
 
@@ -103,9 +124,29 @@ export default {
       count: 0,
       money: '',
       note: ''
+    },
+    filter: {
+      side: '',
+      role: '',
+      confirm: ''
     }
   }),
   methods: {
+    filterPass (person) {
+      if (this.filter.side && this.filter.side !== person.side) return false
+      if (this.filter.role && this.filter.role !== person.role) return false
+      if (this.filter.confirm) {
+        if (this.filter.confirm === 'not_sure' && person.confirm) return false
+        if (this.filter.confirm === 'attend' && (!person.confirm || person.count === 0)) return false
+        if (this.filter.confirm === 'not_attend' && (!person.confirm || person.count !== 0)) return false
+      }
+      return true
+    },
+    getNoteHtml (note) {
+      if (!note) return ''
+      var s = marked(note)
+      return s.substring(3, s.length - 5)
+    },
     getName (person) {
       if (person.dependant) {
         return person.name + '夫妇'
@@ -114,7 +155,7 @@ export default {
       }
     },
     getIdentity (person) {
-      var side = {bride: '女方', bridegroom: '男方'}
+      var side = {bride: '女方', bridegroom: '男方', shared: '共同的'}
       var role = {relative: '亲戚', old_friend: '父母的朋友', classmate: '同学'}
       if (!person.side && !person.role) {
         return '未知'
@@ -291,4 +332,7 @@ export default {
 
 .invitation:link, .invitation:hover, .invitation:visited, .invitation:active
   color black
+
+.filter
+  margin 10px
 </style>
