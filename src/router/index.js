@@ -9,7 +9,6 @@ import config from '@/config'
 import AdminPosts from '@/components/AdminPosts'
 import AdminPhotos from '@/components/AdminPhotos'
 import AdminAttendee from '@/components/AdminAttendee'
-import AdminGuestbook from '@/components/AdminGuestbook'
 
 Vue.use(Router)
 
@@ -75,18 +74,14 @@ const router = new Router({
       meta: {
         title: config.page.adminAttendee
       }
-    },
-    {
-      path: '/admin/guestbook',
-      component: AdminGuestbook,
-      meta: {
-        title: config.page.adminGuestbook
-      }
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
+  if (to.path === '/guestbook') {
+    location.href = '/bbs'
+  }
   document.title = to.meta.title + ' - ' + config.website
   next()
 })
