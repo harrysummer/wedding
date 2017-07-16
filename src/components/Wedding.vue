@@ -65,6 +65,7 @@ export default {
 
 #wedding-overlay
   background $bgcolor
+  margin-top 300px
 
 .wedding-block
   font-size 28pt

@@ -31,7 +31,9 @@ import Icon from 'vue-awesome/components/Icon'
 
 Vue.config.productionTip = false
 Vue.component('icon', Icon)
-Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+  loading: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAABCAQAAACC0sM2AAAADElEQVR42mNkGCYAAAGSAAIVQ4IOAAAAAElFTkSuQmCC'
+})
 
 /* eslint-disable no-new */
 new Vue({

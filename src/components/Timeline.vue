@@ -77,7 +77,7 @@ export default {
   },
   methods: {
     handleScroll () {
-      this.scrollAmount = window.scrollY - $(this.$el).offset().top
+      this.scrollAmount = window.pageYOffset - $(this.$el).offset().top
     },
     layout () {
       var smallScreen = $(window).width() < 768

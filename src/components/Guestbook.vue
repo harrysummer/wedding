@@ -1,0 +1,3 @@
+<template lang='pug'>
+  div 请稍候……
+</template>

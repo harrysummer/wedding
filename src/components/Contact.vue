@@ -8,8 +8,8 @@ div.contact-main
 
 <style lang='stylus' scoped>
 .page-title
-  margin 0.2em 0 0.2em
-  font-size 36pt
+  margin 0.2em 0 0.2em 0.2em
+  font-size 24pt
   color gray
 
 .contact-item
