@@ -153,7 +153,7 @@ export default {
           date: this.editor.date,
           content: this.editor.content,
           icon: this.editor.icon,
-          photos: this.editor.photos.split(',')
+          photos: this.editor.photos ? this.editor.photos.split(',') : []
         }
         axios.post('/api/post', post, {
           headers: {
@@ -175,7 +175,7 @@ export default {
           date: this.editor.date,
           content: this.editor.content,
           icon: this.editor.icon,
-          photos: this.editor.photos.split(','),
+          photos: this.editor.photos ? this.editor.photos.split(',') : [],
           key: this.editor.key
         }
         axios.put('/api/post/' + this.editor.id, post, {

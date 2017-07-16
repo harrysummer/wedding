@@ -43,7 +43,7 @@ div.timeline(
     div.timeline-title(v-if='post.title') {{ post.title }}
     div.timeline-date(v-if='post.date') {{ post.date }}
     img.timeline-image(v-if='post.photos && post.photos.length == 1' v-lazy='"/api/photo/" + post.photos[0]')
-    rd-swipe.timeline-slide(v-else-if='post.photos && post.photos.length > 1' :swipe='swipe[post._id]')
+    rd-swipe.timeline-slide(v-if='post.photos && post.photos.length > 1' :swipe='swipe[post._id]')
       div.rd-swipe-item(v-for='photo of post.photos'): img.timeline-slide-image(v-lazy='"/api/photo/" + photo')
     div.timeline-content(v-if='post.content' v-html='marked(post.content)')
 </template>
